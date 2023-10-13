@@ -4,7 +4,8 @@ const swaggerSpec = require("./swagger.js");
 const app = express();
 const port = 3000;
 
-app.use("/health-check", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 /**
  * @swagger
  * /health-check:
