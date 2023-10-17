@@ -1,6 +1,6 @@
-const express = require("express");
-const swaggerUi = require("swagger-ui-express");
-const swaggerSpec = require("./swagger.js");
+import express from "express";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./swagger.js";
 const app = express();
 const port = 3000;
 
