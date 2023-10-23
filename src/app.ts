@@ -1,14 +1,30 @@
 import express from "express";
+
 import swaggerUi from "swagger-ui-express";
-import swaggerSpec from "./swagger.js";
+
+import swaggerJSDoc from "swagger-jsdoc";
+
 const app = express();
+
 const port = 3000;
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+const swaggerOptions = {
+	definition: {
+		openapi: "3.0.0",
+		info: {
+			title: "node.js_course_practice",
+			version: "1.0.0",
+			description: "Documentation for my Node.js API",
+		},
+	},
+	apis: ["./src/app.ts", "./dist/app.js"],
+};
+
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 /**
  * @swagger
- * /health-check:
+ * /api-docs:
  *   get:
  *     summary: Check the health of the application
  *     description: |
@@ -21,6 +37,8 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
  *             schema:
  *               type: string
  */
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/health-check", (req, res) => {
 	res.send(`Health check on port ${port}`);

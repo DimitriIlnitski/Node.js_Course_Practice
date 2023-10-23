@@ -5,13 +5,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
-const swagger_js_1 = __importDefault(require("./swagger.js"));
+const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 const app = (0, express_1.default)();
 const port = 3000;
-app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_js_1.default));
+const swaggerOptions = {
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "node.js_course_practice",
+            version: "1.0.0",
+            description: "Documentation for my Node.js API",
+        },
+    },
+    apis: ["./app.ts", "./app.js"],
+};
+const swaggerSpec = (0, swagger_jsdoc_1.default)(swaggerOptions);
 /**
  * @swagger
- * /health-check:
+ * /api-docs:
  *   get:
  *     summary: Check the health of the application
  *     description: |
@@ -24,6 +35,7 @@ app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.de
  *             schema:
  *               type: string
  */
+app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerSpec));
 app.get("/health-check", (req, res) => {
     res.send(`Health check on port ${port}`);
 });
