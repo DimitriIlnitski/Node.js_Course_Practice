@@ -19,9 +19,11 @@ const swaggerOptions = {
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 /**
  * @swagger
- * /api-docs:
+ * /health-check:
  *   get:
  *     summary: Check the health of the application
  *     description: |
@@ -34,9 +36,6 @@ const swaggerSpec = swaggerJSDoc(swaggerOptions);
  *             schema:
  *               type: string
  */
-
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
 app.get("/health-check", (req, res) => {
 	res.send(`Health check on port ${port}`);
 });
