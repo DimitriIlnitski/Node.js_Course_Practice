@@ -2,9 +2,11 @@
 	"name": "node.js_course_practice",
 	"version": "1.0.0",
 	"description": "",
-	"main": "app.js",
+	"main": "./dist/app.js",
 	"scripts": {
-		"start": "node app.js",
+		"build": "rimraf ./build && tsc",
+		"start": "npm run build && node ./dist/app.js",
+		"start:dev": "nodemon src/app.ts",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {
@@ -23,6 +25,12 @@
 		"swagger-ui-express": "^5.0.0"
 	},
 	"devDependencies": {
-		"nodemon": "^3.0.1"
+		"@types/express": "^4.17.19",
+		"@types/swagger-jsdoc": "^6.0.1",
+		"@types/swagger-ui-express": "^4.1.4",
+		"nodemon": "^3.0.1",
+		"rimraf": "^5.0.5",
+		"ts-node": "^10.9.1",
+		"typescript": "^5.2.2"
 	}
 }
