@@ -1,9 +1,16 @@
 import express from "express";
+import mongoose from "mongoose";
+import bodyParser from "body-parser";
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
+import movieRoutes from "./routes/movieRoutes";
+import genreRoutes from "./routes/genreRoutes";
 
 const app = express();
 const port = 3000;
+app.use(bodyParser.json());
+
+mongoose.connect("mongodb://localhost:27017/ExampleDB");
 
 const swaggerOptions = {
 	definition: {
@@ -13,8 +20,53 @@ const swaggerOptions = {
 			version: "1.0.0",
 			description: "Documentation for my Node.js API",
 		},
+		components: {
+			schemas: {
+				Movie: {
+					type: "object",
+					properties: {
+						title: {
+							type: "string",
+							description: "Title of the movie",
+						},
+						description: {
+							type: "string",
+							description: "Description of the movie",
+						},
+						releaseDate: {
+							type: "string",
+							format: "date",
+							description: "Release date of the movie",
+						},
+						genre: {
+							type: "array",
+							items: {
+								type: "string",
+							},
+							description: "Genres associated with the movie",
+						},
+					},
+				},
+				Genre: {
+					type: "object",
+					properties: {
+						name: {
+							type: "string",
+							description: "Name of the genre",
+						},
+					},
+				},
+			},
+		},
 	},
-	apis: ["./src/app.ts", "./dist/app.js"],
+	apis: [
+		"./src/app.ts",
+		"./dist/app.js",
+		"./src/routes/movieRoutes.ts",
+		"./src/routes/genreRoutes.ts",
+		"./dist/routes/movieRoutes.js",
+		"./dist/routes/genreRoutes.js",
+	],
 };
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
@@ -42,6 +94,12 @@ app.get("/health-check", (req, res) => {
 
 app.get("/", (req, res) => {
 	res.send(`General page`);
+});
+
+app.use("/movies", movieRoutes);
+app.use("/genres", genreRoutes);
+app.use(function (request, response, next) {
+	response.status(404).send("Not found");
 });
 
 app.listen(port, () => {
