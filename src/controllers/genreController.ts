@@ -1,9 +1,15 @@
 import Genre from "../models/genre";
 import { Request, Response } from "express";
+import { genreValidation } from "../validations/genreValidation";
 
 // Create a new genre
 export const createGenre = async (req: Request, res: Response) => {
 	try {
+		const { error } = genreValidation.validate(req.body);
+		if (error) {
+			return res.status(400).json({ message: error.details[0].message });
+		}
+
 		const newGenre = await Genre.create(req.body);
 		res.status(201).json(newGenre);
 	} catch (err: unknown) {
@@ -24,6 +30,11 @@ export const getGenres = async (_req: Request, res: Response) => {
 // Update a genre by ID
 export const updateGenre = async (req: Request, res: Response) => {
 	try {
+		const { error } = genreValidation.validate(req.body);
+		if (error) {
+			return res.status(400).json({ message: error.details[0].message });
+		}
+
 		const updatedGenre = await Genre.findByIdAndUpdate(
 			req.params.id,
 			req.body,

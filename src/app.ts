@@ -1,16 +1,21 @@
 import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
+import "dotenv/config";
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
 import movieRoutes from "./routes/movieRoutes";
 import genreRoutes from "./routes/genreRoutes";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 app.use(bodyParser.json());
 
-mongoose.connect("mongodb://localhost:27017/ExampleDB");
+if (!process.env.DB_CONNECTION) {
+	console.error("DB_CONNECTION is not defined in the .env file");
+	process.exit(1); 
+}
+mongoose.connect(process.env.DB_CONNECTION);
 
 const swaggerOptions = {
 	definition: {
