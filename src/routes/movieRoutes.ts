@@ -80,6 +80,26 @@ const router = express.Router();
  *     responses:
  *       '200':
  *         description: Successfully deleted
+ *  /movies/genre/{genreName}:    
+ *   get:
+ *     summary: Get movies by genre
+ *     description: Retrieves movies based on a specific genre
+ *     parameters:
+ *       - name: genreName
+ *         in: path
+ *         required: true
+ *         description: Name of the genre to filter movies
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Movie'
  */
 
 router.post("/", createMovie);
