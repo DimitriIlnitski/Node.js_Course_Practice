@@ -21,7 +21,6 @@ export const createMovie = async (req: Request, res: Response) => {
 export const getMovies = async (req: Request, res: Response) => {
 	try {
 		const movies = await Movie.find({});
-		console.log("Fetched movies:", movies);
 		res.json(movies);
 	} catch (err: unknown) {
 		res.status(500).json({ message: (err as Error).message });
@@ -69,7 +68,14 @@ export const getMoviesByGenre = async (req: Request, res: Response) => {
 		const { genreName } = req.params;
 		const movies = await Movie.find({
 			genre: { $regex: genreName, $options: "i" },
-		}); // Find movies by genre
+		});
+
+		if (movies.length === 0) {
+			return res
+				.status(404)
+				.json({ message: "Movies by genre have not been found" });
+		}
+
 		res.json(movies);
 	} catch (err: unknown) {
 		res.status(500).json({ message: (err as Error).message });

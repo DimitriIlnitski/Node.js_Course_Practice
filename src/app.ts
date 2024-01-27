@@ -107,6 +107,8 @@ app.use(function (request, response, next) {
 	response.status(404).send("Not found");
 });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
 	console.log(`App listening on port ${port}`);
 });
+
+export {app, server};
